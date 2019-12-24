@@ -22,13 +22,13 @@ const TreeNode: React.FC<Props> = ({ nodeID, nodeMap, changeData,
           the user isn't trying to set that edge right now. */}
       {leftChildId === null && !(currEdgeParent === nodeID && currEdgeDir === "left") &&
         <line x1={xCoord} y1={yCoord} x2={xCoord - 50} y2={yCoord + 50}
-          onClick={() => handleSelectStub(nodeID, "left")} />
+          onClick={e => { handleSelectStub(nodeID, "left"); e.stopPropagation() }} />
       }
 
       {/* right child stub */}
       {rightChildId === null && !(currEdgeParent === nodeID && currEdgeDir === "right") &&
         <line x1={xCoord} y1={yCoord} x2={xCoord + 50} y2={yCoord + 50}
-          onClick={() => handleSelectStub(nodeID, "right")} />}
+          onClick={e => { handleSelectStub(nodeID, "right"); e.stopPropagation() }} />}
 
       <g tabIndex={0} onKeyDown={e => {
         if (e.key === "Backspace") {

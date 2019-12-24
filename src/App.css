@@ -32,8 +32,12 @@ line {
   cursor: pointer;
 }
 
-line:hover {
+line:hover, line.edge-in-creation {
   stroke: rgb(90, 169, 206);
+}
+
+line.edge-in-creation {
+  pointer-events: none;
 }
 
 text {

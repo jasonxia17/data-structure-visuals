@@ -8,7 +8,7 @@ svg {
 }
 
 g {
-  stroke: blue;
+  stroke: rgb(91, 91, 231);
   fill: rgb(255, 206, 115);
   outline: none;
   cursor: grab;
@@ -23,7 +23,17 @@ g:focus {
 }
 
 circle {
-  stroke-width: 2.5px;
+  stroke-width: 5px;
+}
+
+line {
+  stroke: rgb(91, 91, 231);
+  stroke-width: 10px;
+  cursor: pointer;
+}
+
+line:hover {
+  stroke: rgb(90, 169, 206);
 }
 
 text {

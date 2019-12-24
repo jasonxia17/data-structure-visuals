@@ -16,6 +16,8 @@ export type NodeMap = { [key: number]: Node };
 const App: React.FC = () => {
   const [nodeMap, setNodeMap] = useState({} as NodeMap);
   const [currId, setCurrId] = useState(0);
+  const [currEdgeParent, setCurrEdgeParent] = useState(null as number | null);
+  const [currEdgeDir, setCurrEdgeDir] = useState("left" as "left" | "right");
 
   const createNewNode = (e: React.MouseEvent) => {
     if (e.currentTarget !== e.target) {
@@ -36,7 +38,12 @@ const App: React.FC = () => {
   }
 
   const changeData = (nodeID: number, newData: string) => {
-    setNodeMap({...nodeMap, [nodeID]: {...nodeMap[nodeID], nodeData: newData}});
+    setNodeMap({ ...nodeMap, [nodeID]: { ...nodeMap[nodeID], nodeData: newData } });
+  }
+
+  const handleSelectStub = (nodeID: number, edgeDir: "left" | "right") => {
+    setCurrEdgeParent(nodeID);
+    setCurrEdgeDir(edgeDir);
   }
 
   return (
@@ -44,7 +51,15 @@ const App: React.FC = () => {
       <svg onDoubleClick={createNewNode}>
         {Object.keys(nodeMap)
           .map(nodeID => parseInt(nodeID))
-          .map(nodeID => <TreeNode key={nodeID} nodeID={nodeID} nodeMap={nodeMap} changeData={changeData} />)}
+          .map(nodeID =>
+            <TreeNode
+              key={nodeID}
+              nodeID={nodeID}
+              nodeMap={nodeMap}
+              currEdgeParent={currEdgeParent}
+              currEdgeDir={currEdgeDir}
+              changeData={changeData}
+              handleSelectStub={handleSelectStub} />)}
       </svg>
     </div>
   );

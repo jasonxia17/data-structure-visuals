@@ -28,8 +28,8 @@ const App: React.FC = () => {
 
     const newNode: Node = {
       nodeData: "",
-      xCoord: e.clientX,
-      yCoord: e.clientY,
+      xCoord: e.pageX,
+      yCoord: e.pageY,
       leftChildId: null,
       rightChildId: null,
       isRoot: true,
@@ -40,7 +40,7 @@ const App: React.FC = () => {
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
+    setMousePos({ x: e.pageX, y: e.pageY });
   }
 
   const changeData = (nodeID: number, newData: string) => {

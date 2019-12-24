@@ -11,10 +11,12 @@ g {
 
 div.no-edge-in-creation g:hover {
   cursor: grab;
+  fill: rgb(255, 172, 18);
 }
 
-div.no-edge-in-creation g:hover {
+div.edge-in-creation g.valid-child:hover {
   fill: rgb(255, 172, 18);
+  cursor: pointer;
 }
 
 div.no-edge-in-creation g:focus {

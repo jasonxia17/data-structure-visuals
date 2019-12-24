@@ -13,7 +13,22 @@ interface Props {
 const TreeNode: React.FC<Props> = ({ nodeID, nodeMap, changeData,
   handleSelectStub, currEdgeParent, currEdgeDir }) => {
 
-  const { xCoord, yCoord, nodeData, leftChildId, rightChildId } = nodeMap[nodeID];
+  const { xCoord, yCoord, nodeData, leftChildId, rightChildId, isRoot } = nodeMap[nodeID];
+
+  const isValidChild = () => {
+    if (!isRoot) {
+      return false;
+    }
+    if (currEdgeParent === null) {
+      return false;
+    }
+    if (yCoord <= nodeMap[currEdgeParent].yCoord) {
+      return false;
+    }
+
+    return currEdgeDir === "left" ?
+      xCoord < nodeMap[currEdgeParent].xCoord : xCoord > nodeMap[currEdgeParent].xCoord;
+  }
 
   return (
     // tabIndex enables onKeyPress event listener
@@ -30,7 +45,7 @@ const TreeNode: React.FC<Props> = ({ nodeID, nodeMap, changeData,
         <line x1={xCoord} y1={yCoord} x2={xCoord + 50} y2={yCoord + 50}
           onClick={e => { handleSelectStub(nodeID, "right"); e.stopPropagation() }} />}
 
-      <g tabIndex={0} onKeyDown={e => {
+      <g className={isValidChild() ? "valid-child" : ""} tabIndex={0} onKeyDown={e => {
         if (e.key === "Backspace") {
           changeData(nodeID, "");
           return;

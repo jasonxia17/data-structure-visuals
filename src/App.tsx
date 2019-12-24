@@ -3,7 +3,7 @@ import TreeNode from './TreeNode'
 import './App.css';
 
 interface Node {
-  nodeData: number;
+  nodeData: string;
   xCoord: number;
   yCoord: number;
   leftChildId: number | null;
@@ -23,7 +23,7 @@ const App: React.FC = () => {
     }
 
     const newNode: Node = {
-      nodeData: 0,
+      nodeData: "",
       xCoord: e.clientX,
       yCoord: e.clientY,
       leftChildId: null,
@@ -35,7 +35,7 @@ const App: React.FC = () => {
     setCurrId(currId + 1);
   }
 
-  const changeData = (nodeID: number, newData: number) => {
+  const changeData = (nodeID: number, newData: string) => {
     setNodeMap({...nodeMap, [nodeID]: {...nodeMap[nodeID], nodeData: newData}});
   }
 

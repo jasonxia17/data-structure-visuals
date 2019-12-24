@@ -30,6 +30,7 @@ text {
   text-anchor: middle;
   dominant-baseline: middle;
   fill: blue;
+  font-size: xx-large;
 
   -webkit-user-select: none; /* Safari */        
   -moz-user-select: none; /* Firefox */

@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from 'react';
+import * as mathjs from 'mathjs';
 import TreeNode from './TreeNode';
 import EdgeInCreation from './EdgeInCreation';
 import Edge from './Edge';
@@ -13,6 +14,30 @@ interface Node {
 }
 
 export type NodeMap = { [key: number]: Node };
+
+export const constrainChildPos = (childX: number, childY: number,
+  parentX: number, parentY: number, dir: "left" | "right") => {
+
+  const vec = [childX - parentX, childY - parentY]
+
+  const M = dir === "left" ? [
+    [-24 / 25, -7 / 25],
+    [7 / 25, 24 / 25],
+  ] : [
+    [24 / 25, 7 / 25],
+    [7 / 25, 24 / 25],
+  ];
+
+  const transformedVec = mathjs.multiply(mathjs.inv(M), vec) as number[];
+
+  let constrainedVec = transformedVec.map(coord => Math.max(coord, 0));
+  constrainedVec = mathjs.multiply(M, constrainedVec) as number[];
+  constrainedVec = mathjs.add(constrainedVec, [parentX, parentY]) as number[];
+
+  const isPositionValid = transformedVec.every(coord => coord > 0);
+
+  return { x: constrainedVec[0], y: constrainedVec[1], isPositionValid };
+}
 
 const App: React.FC = () => {
   const [nodeMap, setNodeMap] = useState({} as NodeMap);

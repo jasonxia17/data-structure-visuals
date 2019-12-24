@@ -1,5 +1,5 @@
 import React from 'react';
-import { NodeMap } from './App';
+import { NodeMap, constrainChildPos } from './App';
 
 interface Props {
   nodeMap: NodeMap;
@@ -14,8 +14,7 @@ const EdgeInCreation: React.FC<Props> = ({ nodeMap, currEdgeParent, currEdgeDir,
   }
 
   const { xCoord, yCoord } = nodeMap[currEdgeParent]
-  const x = (currEdgeDir === "left") ? Math.min(xCoord, mousePos.x) : Math.max(xCoord, mousePos.x);
-  const y = Math.max(yCoord, mousePos.y);
+  const { x, y } = constrainChildPos(mousePos.x, mousePos.y, xCoord, yCoord, currEdgeDir);
 
   return (
     <line

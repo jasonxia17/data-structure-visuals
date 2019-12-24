@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { NodeMap } from './App';
+import { NodeMap, constrainChildPos } from './App';
 
 interface Props {
   nodeID: number;
@@ -21,20 +21,9 @@ const TreeNode: React.FC<Props> = (
   const isRoot = Object.values(nodeMap)
     .every(({ leftChildId, rightChildId }) => leftChildId !== nodeID && rightChildId !== nodeID);
 
-  const isValidChild = () => {
-    if (!isRoot) {
-      return false;
-    }
-    if (currEdgeParent === null) {
-      return false;
-    }
-    if (yCoord <= nodeMap[currEdgeParent].yCoord) {
-      return false;
-    }
-
-    return currEdgeDir === "left" ?
-      xCoord < nodeMap[currEdgeParent].xCoord : xCoord > nodeMap[currEdgeParent].xCoord;
-  }
+  const isValidChild = isRoot && (currEdgeParent !== null) &&
+    constrainChildPos(xCoord, yCoord, nodeMap[currEdgeParent].xCoord,
+      nodeMap[currEdgeParent].yCoord, currEdgeDir).isPositionValid;
 
   return (
     // tabIndex enables onKeyPress event listener
@@ -51,7 +40,7 @@ const TreeNode: React.FC<Props> = (
         <line x1={xCoord} y1={yCoord} x2={xCoord + 50} y2={yCoord + 50}
           onClick={e => { handleSelectStub(nodeID, "right"); e.stopPropagation() }} />}
 
-      <g className={isValidChild() ? "valid-child" : ""} tabIndex={0}
+      <g className={isValidChild ? "valid-child" : ""} tabIndex={0}
         onKeyDown={e => {
           if (e.key === "Backspace") {
             changeData(nodeID, "");
@@ -71,7 +60,7 @@ const TreeNode: React.FC<Props> = (
         }}
 
         onClick={() => {
-          if (isValidChild()) {
+          if (isValidChild) {
             createEdge()
           }
         }}>

@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import * as mathjs from 'mathjs';
 import TreeNode from './TreeNode';
 import EdgeInCreation from './EdgeInCreation';
@@ -91,7 +91,7 @@ const App: React.FC = () => {
 
       const dx = x - nodeMap[draggedNodeId].xCoord;
       const dy = y - nodeMap[draggedNodeId].yCoord;
-      const newNodeMap : NodeMap = JSON.parse(JSON.stringify(nodeMap));
+      const newNodeMap: NodeMap = JSON.parse(JSON.stringify(nodeMap));
 
       getAllIdsinSubtree(draggedNodeId).forEach(id => {
         newNodeMap[id].xCoord += dx;
@@ -111,12 +111,17 @@ const App: React.FC = () => {
     setCurrEdgeDir(edgeDir);
   }
 
-  return (
-    <div className={currEdgeParent === null ? "no-edge-in-creation" : "edge-in-creation"}>
-      <svg onDoubleClick={createNewNode} onMouseMove={handleMouseMove}
-        onClick={() => setCurrEdgeParent(null)}
-        onMouseUp={() => setDraggedNode(null)}>
+  let className = currEdgeParent === null ? "no-edge-in-creation" : "edge-in-creation";
+  className += " wrapper";
 
+  return (
+    <div className={className}>
+      <svg onMouseMove={handleMouseMove}
+        onClick={currEdgeParent === null ?
+          createNewNode :
+          () => setCurrEdgeParent(null)}
+        onMouseUp={() => setDraggedNode(null)}
+      >
 
         {Object.keys(nodeMap)
           .map(nodeID => parseInt(nodeID))
@@ -163,6 +168,18 @@ const App: React.FC = () => {
             />
           )}
       </svg>
+
+      <div className="sidebar">
+        <h3>Binary Search / AVL Tree</h3>
+        <ul>
+          <li>Click anywhere to create a new node</li>
+          <li>Select a node and type to enter data (backspace to delete data)</li>
+          <li>To create an edge, click on one of the parent's stubs. Then, click the desired child.
+            (Child must be positioned properly relative to parent for edge to be created.)
+          </li>
+          <li>Click here for a permalink to the tree that you've created!</li>
+        </ul>
+      </div>
     </div>
   );
 }

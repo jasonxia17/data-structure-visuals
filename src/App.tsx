@@ -1,13 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TreeNode from './TreeNode'
 import './App.css';
 
+interface Node {
+  nodeData: number;
+  xCoord: number;
+  yCoord: number;
+  leftChildId: number | null;
+  rightChildId: number | null;
+  isRoot: boolean;
+}
+
 const App: React.FC = () => {
+  const [nodeList, setNodeList] = useState({} as { [key: number]: Node });
+  const [currId, setCurrId] = useState(0);
+
+  const createNewNode = (e: React.MouseEvent) => {
+    if (e.currentTarget !== e.target) {
+      return;
+    }
+
+    const newNode : Node = {
+      nodeData: 0,
+      xCoord: e.clientX,
+      yCoord: e.clientY,
+      leftChildId: null,
+      rightChildId: null,
+      isRoot: true,
+    };
+
+    setNodeList({...nodeList, [currId]: newNode});
+    setCurrId(currId + 1);
+    console.log(nodeList);
+  }
+
   return (
     <div className="App">
-      <svg>
-        <TreeNode nodeData={12} xCoord={90} yCoord={200}/>
-        <TreeNode nodeData={15} xCoord={300} yCoord={200}/>
+      <svg onMouseDown={createNewNode}>
+        {Object.values(nodeList).map(props => <TreeNode {...props}/>)}
       </svg>
     </div>
   );

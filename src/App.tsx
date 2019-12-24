@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import TreeNode from './TreeNode';
 import EdgeInCreation from './EdgeInCreation';
+import Edge from './Edge';
 import './App.css';
 
 interface Node {
@@ -9,7 +10,6 @@ interface Node {
   yCoord: number;
   leftChildId: number | null;
   rightChildId: number | null;
-  isRoot: boolean;
 }
 
 export type NodeMap = { [key: number]: Node };
@@ -32,7 +32,6 @@ const App: React.FC = () => {
       yCoord: e.pageY,
       leftChildId: null,
       rightChildId: null,
-      isRoot: true,
     };
 
     setNodeMap({ ...nodeMap, [currId]: newNode });
@@ -57,6 +56,22 @@ const App: React.FC = () => {
       <svg onDoubleClick={createNewNode} onMouseMove={handleMouseMove}
         onClick={() => setCurrEdgeParent(null)}>
 
+
+        {Object.keys(nodeMap)
+          .map(nodeID => parseInt(nodeID))
+          .map(nodeID => {
+            const { leftChildId, rightChildId } = nodeMap[nodeID];
+            return (
+              <Fragment key={nodeID}>
+                {leftChildId &&
+                  <Edge nodeMap={nodeMap} parentID={nodeID} childID={leftChildId} />}
+
+                {rightChildId &&
+                  <Edge nodeMap={nodeMap} parentID={nodeID} childID={rightChildId} />}
+              </Fragment>
+            );
+          })}
+
         <EdgeInCreation nodeMap={nodeMap} currEdgeParent={currEdgeParent}
           currEdgeDir={currEdgeDir} mousePos={mousePos} />
 
@@ -70,7 +85,21 @@ const App: React.FC = () => {
               currEdgeParent={currEdgeParent}
               currEdgeDir={currEdgeDir}
               changeData={changeData}
-              handleSelectStub={handleSelectStub} />)}
+              handleSelectStub={handleSelectStub}
+
+              createEdge={() => {
+                if (currEdgeParent === null) return;
+                const modifiedNode = { ...nodeMap[currEdgeParent] };
+                if (currEdgeDir === "left") {
+                  Object.assign(modifiedNode, { leftChildId: nodeID })
+                } else {
+                  Object.assign(modifiedNode, { rightChildId: nodeID })
+                }
+
+                setNodeMap({ ...nodeMap, [currEdgeParent]: modifiedNode });
+              }}
+            />
+          )}
       </svg>
     </div>
   );

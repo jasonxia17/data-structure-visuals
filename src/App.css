@@ -37,8 +37,12 @@ line:hover, line.edge-in-creation {
   stroke: rgb(151, 180, 235);
 }
 
-line.edge-in-creation {
+div.edge-in-creation line {
   pointer-events: none;
+}
+
+line.edge:hover {
+  stroke: rgb(255, 156, 156);
 }
 
 text {

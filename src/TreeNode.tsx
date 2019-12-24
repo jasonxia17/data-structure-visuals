@@ -8,12 +8,18 @@ interface Props {
   currEdgeDir: "left" | "right";
   changeData: (nodeID: number, newData: string) => void;
   handleSelectStub: (nodeID: number, edgeDir: "left" | "right") => void;
+  /* Create edge with this node as child */
+  createEdge: () => void;
 }
 
-const TreeNode: React.FC<Props> = ({ nodeID, nodeMap, changeData,
-  handleSelectStub, currEdgeParent, currEdgeDir }) => {
+const TreeNode: React.FC<Props> = (
+  { nodeID, nodeMap, changeData,
+    handleSelectStub, currEdgeParent, currEdgeDir, createEdge }) => {
 
-  const { xCoord, yCoord, nodeData, leftChildId, rightChildId, isRoot } = nodeMap[nodeID];
+  const { xCoord, yCoord, nodeData, leftChildId, rightChildId } = nodeMap[nodeID];
+
+  const isRoot = Object.values(nodeMap)
+    .every(({ leftChildId, rightChildId }) => leftChildId !== nodeID && rightChildId !== nodeID);
 
   const isValidChild = () => {
     if (!isRoot) {
@@ -45,23 +51,30 @@ const TreeNode: React.FC<Props> = ({ nodeID, nodeMap, changeData,
         <line x1={xCoord} y1={yCoord} x2={xCoord + 50} y2={yCoord + 50}
           onClick={e => { handleSelectStub(nodeID, "right"); e.stopPropagation() }} />}
 
-      <g className={isValidChild() ? "valid-child" : ""} tabIndex={0} onKeyDown={e => {
-        if (e.key === "Backspace") {
-          changeData(nodeID, "");
-          return;
-        }
+      <g className={isValidChild() ? "valid-child" : ""} tabIndex={0}
+        onKeyDown={e => {
+          if (e.key === "Backspace") {
+            changeData(nodeID, "");
+            return;
+          }
 
-        if (nodeData.length >= 4) {
-          return;
-        }
+          if (nodeData.length >= 4) {
+            return;
+          }
 
-        if ("0123456789".includes(e.key) ||
-          (e.key === "-" && nodeData.length === 0) ||
-          (e.key === "." && !nodeData.includes("."))) {
+          if ("0123456789".includes(e.key) ||
+            (e.key === "-" && nodeData.length === 0) ||
+            (e.key === "." && !nodeData.includes("."))) {
 
-          changeData(nodeID, nodeData + e.key);
-        }
-      }}>
+            changeData(nodeID, nodeData + e.key);
+          }
+        }}
+
+        onClick={() => {
+          if (isValidChild()) {
+            createEdge()
+          }
+        }}>
         <circle cx={xCoord} cy={yCoord} r={45} />
         <text x={xCoord} y={yCoord}>{nodeData}</text>
       </g>

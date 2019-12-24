@@ -10,11 +10,16 @@ svg {
 g {
   stroke: blue;
   fill: rgb(255, 206, 115);
+  outline: none;
   cursor: grab;
 }
 
 g:hover {
-  fill: orange;
+  fill: rgb(255, 187, 60);
+}
+
+g:focus {
+  fill: rgb(255, 166, 0);
 }
 
 circle {

@@ -11,8 +11,10 @@ interface Node {
   isRoot: boolean;
 }
 
+export type NodeMap = { [key: number]: Node };
+
 const App: React.FC = () => {
-  const [nodeList, setNodeList] = useState({} as { [key: number]: Node });
+  const [nodeMap, setNodeMap] = useState({} as NodeMap);
   const [currId, setCurrId] = useState(0);
 
   const createNewNode = (e: React.MouseEvent) => {
@@ -20,7 +22,7 @@ const App: React.FC = () => {
       return;
     }
 
-    const newNode : Node = {
+    const newNode: Node = {
       nodeData: 0,
       xCoord: e.clientX,
       yCoord: e.clientY,
@@ -29,15 +31,20 @@ const App: React.FC = () => {
       isRoot: true,
     };
 
-    setNodeList({...nodeList, [currId]: newNode});
+    setNodeMap({ ...nodeMap, [currId]: newNode });
     setCurrId(currId + 1);
-    console.log(nodeList);
+  }
+
+  const changeData = (nodeID: number, newData: number) => {
+    setNodeMap({...nodeMap, [nodeID]: {...nodeMap[nodeID], nodeData: newData}});
   }
 
   return (
     <div className="App">
-      <svg onMouseDown={createNewNode}>
-        {Object.values(nodeList).map(props => <TreeNode {...props}/>)}
+      <svg onDoubleClick={createNewNode}>
+        {Object.keys(nodeMap)
+          .map(nodeID => parseInt(nodeID))
+          .map(nodeID => <TreeNode key={nodeID} nodeID={nodeID} nodeMap={nodeMap} changeData={changeData} />)}
       </svg>
     </div>
   );

@@ -1,7 +1,3 @@
-.App {
-  text-align: center;
-}
-
 svg {
   width: 100%;
   height: 2000px;
@@ -11,15 +7,18 @@ g {
   stroke: rgb(91, 91, 231);
   fill: rgb(255, 206, 115);
   outline: none;
+}
+
+div.no-edge-in-creation g:hover {
   cursor: grab;
 }
 
-g:hover {
-  fill: rgb(255, 187, 60);
+div.no-edge-in-creation g:hover {
+  fill: rgb(255, 172, 18);
 }
 
-g:focus {
-  fill: rgb(255, 166, 0);
+div.no-edge-in-creation g:focus {
+  fill: rgb(218, 231, 255);
 }
 
 circle {
@@ -33,7 +32,7 @@ line {
 }
 
 line:hover, line.edge-in-creation {
-  stroke: rgb(90, 169, 206);
+  stroke: rgb(151, 180, 235);
 }
 
 line.edge-in-creation {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import TreeNode from './TreeNode'
+import TreeNode from './TreeNode';
+import EdgeInCreation from './EdgeInCreation';
 import './App.css';
 
 interface Node {
@@ -39,14 +40,7 @@ const App: React.FC = () => {
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (currEdgeParent === null) {
-      setMousePos({ x: e.clientX, y: e.clientY });
-      return;
-    }
-    const { xCoord, yCoord } = nodeMap[currEdgeParent]
-    const x = (currEdgeDir === "left") ? Math.min(xCoord, e.clientX) : Math.max(xCoord, e.clientX);
-    const y = Math.max(yCoord, e.clientY);
-    setMousePos({ x, y });
+    setMousePos({ x: e.clientX, y: e.clientY });
   }
 
   const changeData = (nodeID: number, newData: string) => {
@@ -59,14 +53,12 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="App">
+    <div className={currEdgeParent === null ? "no-edge-in-creation" : "edge-in-creation"}>
       <svg onDoubleClick={createNewNode} onMouseMove={handleMouseMove}
-           onClick={() => setCurrEdgeParent(null)}>
-        {currEdgeParent !== null &&
-          <line
-            className="edge-in-creation" 
-            x1={nodeMap[currEdgeParent].xCoord} y1={nodeMap[currEdgeParent].yCoord}
-            x2={mousePos.x} y2={mousePos.y} />}
+        onClick={() => setCurrEdgeParent(null)}>
+
+        <EdgeInCreation nodeMap={nodeMap} currEdgeParent={currEdgeParent}
+          currEdgeDir={currEdgeDir} mousePos={mousePos} />
 
         {Object.keys(nodeMap)
           .map(nodeID => parseInt(nodeID))

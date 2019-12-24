@@ -24,9 +24,9 @@ export const constrainChildPos = (childX: number, childY: number,
     [-24 / 25, -7 / 25],
     [7 / 25, 24 / 25],
   ] : [
-    [24 / 25, 7 / 25],
-    [7 / 25, 24 / 25],
-  ];
+      [24 / 25, 7 / 25],
+      [7 / 25, 24 / 25],
+    ];
 
   const transformedVec = mathjs.multiply(mathjs.inv(M), vec) as number[];
 
@@ -45,6 +45,7 @@ const App: React.FC = () => {
   const [currEdgeParent, setCurrEdgeParent] = useState(null as number | null);
   const [currEdgeDir, setCurrEdgeDir] = useState("left" as "left" | "right");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [draggedNodeId, setDraggedNode] = useState(null as number | null);
 
   const createNewNode = (e: React.MouseEvent) => {
     if (e.currentTarget !== e.target) {
@@ -63,8 +64,42 @@ const App: React.FC = () => {
     setCurrId(currId + 1);
   }
 
+  const getAllIdsinSubtree = (subrootId: number | null): number[] => {
+    if (subrootId === null) {
+      return [];
+    }
+
+    return [subrootId]
+      .concat(getAllIdsinSubtree(nodeMap[subrootId].leftChildId))
+      .concat(getAllIdsinSubtree(nodeMap[subrootId].rightChildId))
+  }
+
   const handleMouseMove = (e: React.MouseEvent) => {
     setMousePos({ x: e.pageX, y: e.pageY });
+
+    if (draggedNodeId !== null) {
+      let x = e.pageX;
+      let y = e.pageY;
+
+      let parNode = Object.values(nodeMap).find(node =>
+        node.leftChildId === draggedNodeId || node.rightChildId === draggedNodeId);
+
+      if (parNode !== undefined) {
+        const dir = parNode.leftChildId === draggedNodeId ? "left" : "right";
+        ({ x, y } = constrainChildPos(x, y, parNode.xCoord, parNode.yCoord, dir));
+      }
+
+      const dx = x - nodeMap[draggedNodeId].xCoord;
+      const dy = y - nodeMap[draggedNodeId].yCoord;
+      const newNodeMap : NodeMap = JSON.parse(JSON.stringify(nodeMap));
+
+      getAllIdsinSubtree(draggedNodeId).forEach(id => {
+        newNodeMap[id].xCoord += dx;
+        newNodeMap[id].yCoord += dy;
+      })
+
+      setNodeMap(newNodeMap);
+    }
   }
 
   const changeData = (nodeID: number, newData: string) => {
@@ -79,7 +114,8 @@ const App: React.FC = () => {
   return (
     <div className={currEdgeParent === null ? "no-edge-in-creation" : "edge-in-creation"}>
       <svg onDoubleClick={createNewNode} onMouseMove={handleMouseMove}
-        onClick={() => setCurrEdgeParent(null)}>
+        onClick={() => setCurrEdgeParent(null)}
+        onMouseUp={() => setDraggedNode(null)}>
 
 
         {Object.keys(nodeMap)
@@ -88,10 +124,10 @@ const App: React.FC = () => {
             const { leftChildId, rightChildId } = nodeMap[nodeID];
             return (
               <Fragment key={nodeID}>
-                {leftChildId &&
+                {leftChildId !== null &&
                   <Edge nodeMap={nodeMap} parentID={nodeID} childID={leftChildId} />}
 
-                {rightChildId &&
+                {rightChildId !== null &&
                   <Edge nodeMap={nodeMap} parentID={nodeID} childID={rightChildId} />}
               </Fragment>
             );
@@ -111,6 +147,7 @@ const App: React.FC = () => {
               currEdgeDir={currEdgeDir}
               changeData={changeData}
               handleSelectStub={handleSelectStub}
+              onMouseDown={() => setDraggedNode(nodeID)}
 
               createEdge={() => {
                 if (currEdgeParent === null) return;

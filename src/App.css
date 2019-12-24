@@ -23,6 +23,10 @@ div.no-edge-in-creation g:focus {
   fill: rgb(218, 231, 255);
 }
 
+div.no-edge-in-creation g:focus:hover {
+  fill: rgb(177, 204, 255);
+}
+
 circle {
   stroke-width: 5px;
 }

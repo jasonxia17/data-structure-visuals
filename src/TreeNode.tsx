@@ -10,11 +10,12 @@ interface Props {
   handleSelectStub: (nodeID: number, edgeDir: "left" | "right") => void;
   /* Create edge with this node as child */
   createEdge: () => void;
+  onMouseDown: () => void;
 }
 
 const TreeNode: React.FC<Props> = (
   { nodeID, nodeMap, changeData,
-    handleSelectStub, currEdgeParent, currEdgeDir, createEdge }) => {
+    handleSelectStub, currEdgeParent, currEdgeDir, createEdge, onMouseDown }) => {
 
   const { xCoord, yCoord, nodeData, leftChildId, rightChildId } = nodeMap[nodeID];
 
@@ -62,6 +63,12 @@ const TreeNode: React.FC<Props> = (
         onClick={() => {
           if (isValidChild) {
             createEdge()
+          }
+        }}
+        
+        onMouseDown={() => {
+          if (currEdgeParent === null) {
+            onMouseDown()
           }
         }}>
         <circle cx={xCoord} cy={yCoord} r={45} />

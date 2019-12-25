@@ -18,25 +18,16 @@ export type NodeMap = { [key: number]: Node };
 export const constrainChildPos = (childX: number, childY: number,
   parentX: number, parentY: number, dir: "left" | "right") => {
 
-  const vec = [childX - parentX, childY - parentY]
+  let deltaX = childX - parentX;
+  const deltaXSign = dir === "left" ? -1 : 1;
+  deltaX *= deltaXSign;
+  deltaX = Math.max(60, deltaX);
+  deltaX *= deltaXSign;
 
-  const M = dir === "left" ? [
-    [-24 / 25, -7 / 25],
-    [7 / 25, 24 / 25],
-  ] : [
-      [24 / 25, 7 / 25],
-      [7 / 25, 24 / 25],
-    ];
-
-  const transformedVec = mathjs.multiply(mathjs.inv(M), vec) as number[];
-
-  let constrainedVec = transformedVec.map(coord => Math.max(coord, 0));
-  constrainedVec = mathjs.multiply(M, constrainedVec) as number[];
-  constrainedVec = mathjs.add(constrainedVec, [parentX, parentY]) as number[];
-
-  const isPositionValid = transformedVec.every(coord => coord > 0);
-
-  return { x: constrainedVec[0], y: constrainedVec[1], isPositionValid };
+  return {
+    x: parentX + deltaX,
+    y: parentY + 125,
+  };
 }
 
 const App: React.FC = () => {

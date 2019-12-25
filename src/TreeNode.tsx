@@ -23,9 +23,7 @@ const TreeNode: React.FC<Props> = (
   const isRoot = Object.values(nodeMap)
     .every(({ leftChildId, rightChildId }) => leftChildId !== nodeID && rightChildId !== nodeID);
 
-  const isValidChild = isRoot && (currEdgeParent !== null) &&
-    constrainChildPos(xCoord, yCoord, nodeMap[currEdgeParent].xCoord,
-      nodeMap[currEdgeParent].yCoord, currEdgeDir).isPositionValid;
+  const isValidChild = isRoot;
 
   return (
     // tabIndex enables onKeyPress event listener

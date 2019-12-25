@@ -41,11 +41,18 @@ export const constrainChildPos = (childX: number, childY: number,
 
 const App: React.FC = () => {
   const [nodeMap, setNodeMap] = useState({} as NodeMap);
-  const [currId, setCurrId] = useState(0);
   const [currEdgeParent, setCurrEdgeParent] = useState(null as number | null);
   const [currEdgeDir, setCurrEdgeDir] = useState("left" as "left" | "right");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [draggedNodeId, setDraggedNode] = useState(null as number | null);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const data = url.searchParams.get("data");
+    if (data) {
+      setNodeMap(JSON.parse(data));
+    }
+  }, []) // empty array => componentDidMount, never update
 
   const createNewNode = (e: React.MouseEvent) => {
     if (e.currentTarget !== e.target) {
@@ -60,8 +67,8 @@ const App: React.FC = () => {
       rightChildId: null,
     };
 
+    const currId = Object.keys(nodeMap).length;
     setNodeMap({ ...nodeMap, [currId]: newNode });
-    setCurrId(currId + 1);
   }
 
   const getAllIdsinSubtree = (subrootId: number | null): number[] => {
@@ -109,6 +116,11 @@ const App: React.FC = () => {
   const handleSelectStub = (nodeID: number, edgeDir: "left" | "right") => {
     setCurrEdgeParent(nodeID);
     setCurrEdgeDir(edgeDir);
+  }
+
+  const copyPermalinkToClipboard = () => {
+    const permalink = window.location.origin + "/?data=" + encodeURIComponent(JSON.stringify(nodeMap));
+    navigator.clipboard.writeText(permalink);
   }
 
   let className = currEdgeParent === null ? "no-edge-in-creation" : "edge-in-creation";
@@ -177,8 +189,9 @@ const App: React.FC = () => {
           <li>To create an edge, click on one of the parent's stubs. Then, click the desired child.
             (Child must be positioned properly relative to parent for edge to be created.)
           </li>
-          <li>Click here for a permalink to the tree that you've created!</li>
         </ul>
+
+        <button onClick={copyPermalinkToClipboard}>Copy permalink to clipboard</button>
       </div>
     </div>
   );

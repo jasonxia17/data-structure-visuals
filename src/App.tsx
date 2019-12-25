@@ -142,10 +142,16 @@ const App: React.FC = () => {
             return (
               <Fragment key={nodeID}>
                 {leftChildId !== null &&
-                  <Edge nodeMap={nodeMap} parentID={nodeID} childID={leftChildId} />}
+                  <Edge nodeMap={nodeMap} parentID={nodeID} childID={leftChildId}
+                    onClick={() =>
+                      setNodeMap({ ...nodeMap, [nodeID]: { ...nodeMap[nodeID], leftChildId: null } })}
+                  />}
 
                 {rightChildId !== null &&
-                  <Edge nodeMap={nodeMap} parentID={nodeID} childID={rightChildId} />}
+                  <Edge nodeMap={nodeMap} parentID={nodeID} childID={rightChildId}
+                    onClick={() =>
+                      setNodeMap({ ...nodeMap, [nodeID]: { ...nodeMap[nodeID], rightChildId: null } })}
+                  />}
               </Fragment>
             );
           })}
@@ -189,9 +195,13 @@ const App: React.FC = () => {
           <li>To create an edge, click on one of the parent's stubs. Then, click the desired child.
             (Child must be positioned properly relative to parent for edge to be created.)
           </li>
+          <li>Click on an edge to delete it</li>
+          <li>Drag a node to move its entire subtree</li>
         </ul>
 
         <button onClick={copyPermalinkToClipboard}>Copy permalink to clipboard</button>
+        <button onClick={() => window.location.href = window.location.origin}>Clear</button>
+
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ div.sidebar {
   background: rgb(255, 206, 115);
   width: 300px;
   height: 100%;
-  padding: 5px;
+  padding: 12px;
   
   display: flex;
   flex-direction: column;
@@ -40,6 +40,8 @@ button {
   display: inline-block;
   font-size: 16px;
   cursor: pointer;
+  margin-bottom: 25px;
+  width: 100%;
 }
 
 button:hover {

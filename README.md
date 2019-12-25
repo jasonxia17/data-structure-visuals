@@ -1,44 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is an interactive binary tree. Try it out [here](https://jasonxia17.github.io/data-structure-visuals/)!
 
-## Available Scripts
+This tool can be used to demonstrate all kinds of cool things, such as AVL rotations. Here's a right rotation caused by inserting a new node:
 
-In the project directory, you can run:
+![](rightrotate.gif)
 
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The tool also allows you to take a snapshot of a tree and come back to it later with a permalink. For example, [here](https://jasonxia17.github.io/data-structure-visuals/?data=%7B"0"%3A%7B"nodeData"%3A"66"%2C"xCoord"%3A597%2C"yCoord"%3A76%2C"leftChildId"%3A1%2C"rightChildId"%3A4%7D%2C"1"%3A%7B"nodeData"%3A"55"%2C"xCoord"%3A380.12903225806474%2C"yCoord"%3A197.1290322580643%2C"leftChildId"%3A2%2C"rightChildId"%3A3%7D%2C"2"%3A%7B"nodeData"%3A"2"%2C"xCoord"%3A230.12903225806517%2C"yCoord"%3A320.1290322580645%2C"leftChildId"%3A7%2C"rightChildId"%3A8%7D%2C"3"%3A%7B"nodeData"%3A"60"%2C"xCoord"%3A552.1290322580644%2C"yCoord"%3A314.1290322580645%2C"leftChildId"%3A6%2C"rightChildId"%3Anull%7D%2C"4"%3A%7B"nodeData"%3A"99"%2C"xCoord"%3A825.2296015180261%2C"yCoord"%3A169.35863377609093%2C"leftChildId"%3A5%2C"rightChildId"%3Anull%7D%2C"5"%3A%7B"nodeData"%3A"92"%2C"xCoord"%3A700.2296015180261%2C"yCoord"%3A311.3586337760911%2C"leftChildId"%3Anull%2C"rightChildId"%3Anull%7D%2C"6"%3A%7B"nodeData"%3A"57"%2C"xCoord"%3A466.12903225806485%2C"yCoord"%3A479.1290322580644%2C"leftChildId"%3Anull%2C"rightChildId"%3Anull%7D%2C"7"%3A%7B"nodeData"%3A"-1"%2C"xCoord"%3A135.0000000000002%2C"yCoord"%3A478%2C"leftChildId"%3Anull%2C"rightChildId"%3Anull%7D%2C"8"%3A%7B"nodeData"%3A"5"%2C"xCoord"%3A334.1290322580651%2C"yCoord"%3A485.1290322580644%2C"leftChildId"%3Anull%2C"rightChildId"%3Anull%7D%7D) is the initial state of the tree shown in the GIF above.

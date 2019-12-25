@@ -184,7 +184,7 @@ const App: React.FC = () => {
               changeData={changeData}
               handleSelectStub={handleSelectStub}
 
-              onBackspace={() => {
+              onDelete={() => {
                 const newNodeMap: NodeMap = JSON.parse(JSON.stringify(nodeMap));
                 delete newNodeMap[nodeID];
                 Object.values(newNodeMap).forEach(node => {
@@ -225,10 +225,10 @@ const App: React.FC = () => {
         <h3>Binary Search / AVL Tree</h3>
         <ul>
           <li>Double-click anywhere to create a new node</li>
-          <li>Select a node and type to enter data</li>
-          <li>To delete a node, select it and hit BACKSPACE</li>
+          <li>Select a node and type to enter data, or BACKSPACE to clear the data</li>
+          <li>To delete a node, select it and hit DELETE</li>
           <li>To create an edge, click on one of the parent's stubs. Then, click the desired child.
-            (Child must be positioned properly relative to parent for edge to be created.)
+            (Child must be positioned on the correct side of the parent.)
           </li>
           <li>Click on an edge to delete it</li>
           <li>Drag a node to move its entire subtree</li>

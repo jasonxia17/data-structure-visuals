@@ -6,6 +6,14 @@ div.wrapper {
   transition-delay: 0.2s;
 }
 
+div.drag-in-progress svg * {
+  pointer-events: none;
+}
+
+div.drag-in-progress svg {
+  cursor: grabbing !important;
+}
+
 div.sidebar {
   background: rgb(255, 206, 115);
   width: 300px;
@@ -70,10 +78,6 @@ div.edge-in-creation g.valid-child:hover {
 }
 
 div.no-edge-in-creation g:focus {
-  fill: rgb(234, 241, 255);
-}
-
-div.no-edge-in-creation g:focus:hover {
   fill: rgb(218, 231, 255);
 }
 

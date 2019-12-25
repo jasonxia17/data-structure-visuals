@@ -45,6 +45,7 @@ const App: React.FC = () => {
   const [currEdgeDir, setCurrEdgeDir] = useState("left" as "left" | "right");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [draggedNodeId, setDraggedNode] = useState(null as number | null);
+  const [grabOffset, setGrabOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -53,6 +54,12 @@ const App: React.FC = () => {
       setNodeMap(JSON.parse(data));
     }
   }, []) // empty array => componentDidMount, never update
+
+  useEffect(() => {
+    const callback = () => setDraggedNode(null);
+    document.addEventListener("mouseup", callback);
+    return () => document.removeEventListener("mouseup", callback);
+  }, [])
 
   const createNewNode = (e: React.MouseEvent) => {
     if (e.currentTarget !== e.target) {
@@ -85,8 +92,8 @@ const App: React.FC = () => {
     setMousePos({ x: e.pageX, y: e.pageY });
 
     if (draggedNodeId !== null) {
-      let x = e.pageX;
-      let y = e.pageY;
+      let x = e.pageX + grabOffset.x;
+      let y = e.pageY + grabOffset.y;
 
       let parNode = Object.values(nodeMap).find(node =>
         node.leftChildId === draggedNodeId || node.rightChildId === draggedNodeId);
@@ -125,6 +132,9 @@ const App: React.FC = () => {
 
   let className = currEdgeParent === null ? "no-edge-in-creation" : "edge-in-creation";
   className += " wrapper";
+  if (draggedNodeId !== null) {
+    className += " drag-in-progress";
+  }
 
   return (
     <div className={className}>
@@ -132,7 +142,6 @@ const App: React.FC = () => {
         onMouseMove={handleMouseMove}
         onDoubleClick={createNewNode}
         onClick={() => setCurrEdgeParent(null)}
-        onMouseUp={() => setDraggedNode(null)}
       >
 
         {Object.keys(nodeMap)
@@ -170,7 +179,17 @@ const App: React.FC = () => {
               currEdgeDir={currEdgeDir}
               changeData={changeData}
               handleSelectStub={handleSelectStub}
-              onMouseDown={() => setDraggedNode(nodeID)}
+
+              onMouseDown={e => {
+                if (currEdgeParent !== null) {
+                  return;
+                }
+
+                setDraggedNode(nodeID);
+                const x = nodeMap[nodeID].xCoord - e.pageX;
+                const y = nodeMap[nodeID].yCoord - e.pageY;
+                setGrabOffset({x, y});
+              }}
 
               createEdge={() => {
                 if (currEdgeParent === null) return;

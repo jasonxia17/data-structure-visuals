@@ -10,7 +10,7 @@ interface Props {
   handleSelectStub: (nodeID: number, edgeDir: "left" | "right") => void;
   /* Create edge with this node as child */
   createEdge: () => void;
-  onMouseDown: () => void;
+  onMouseDown: (e: React.MouseEvent) => void;
 }
 
 const TreeNode: React.FC<Props> = (
@@ -66,11 +66,7 @@ const TreeNode: React.FC<Props> = (
           }
         }}
         
-        onMouseDown={() => {
-          if (currEdgeParent === null) {
-            onMouseDown()
-          }
-        }}>
+        onMouseDown={onMouseDown}>
         <circle cx={xCoord} cy={yCoord} r={45} />
         <text x={xCoord} y={yCoord}>{nodeData}</text>
       </g>

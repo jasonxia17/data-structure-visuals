@@ -82,6 +82,18 @@ const App: React.FC = () => {
       .concat(getAllIdsinSubtree(nodeMap[subrootId].rightChildId))
   }
 
+  const positionSubtree = (subrootId: number, x: number, y: number, newNodeMap: NodeMap) => {
+    const dx = x - nodeMap[subrootId].xCoord;
+    const dy = y - nodeMap[subrootId].yCoord;
+
+    getAllIdsinSubtree(subrootId).forEach(id => {
+      newNodeMap[id].xCoord += dx;
+      newNodeMap[id].yCoord += dy;
+    })
+
+    setNodeMap(newNodeMap);
+  }
+
   const handleMouseMove = (e: React.MouseEvent) => {
     setMousePos({ x: e.pageX, y: e.pageY });
 
@@ -97,16 +109,7 @@ const App: React.FC = () => {
         ({ x, y } = constrainChildPos(x, y, parNode.xCoord, parNode.yCoord, dir));
       }
 
-      const dx = x - nodeMap[draggedNodeId].xCoord;
-      const dy = y - nodeMap[draggedNodeId].yCoord;
-      const newNodeMap: NodeMap = JSON.parse(JSON.stringify(nodeMap));
-
-      getAllIdsinSubtree(draggedNodeId).forEach(id => {
-        newNodeMap[id].xCoord += dx;
-        newNodeMap[id].yCoord += dy;
-      })
-
-      setNodeMap(newNodeMap);
+      positionSubtree(draggedNodeId, x, y, JSON.parse(JSON.stringify(nodeMap)));
     }
   }
 
@@ -198,15 +201,22 @@ const App: React.FC = () => {
               }}
 
               createEdge={() => {
-                if (currEdgeParent === null) return;
-                const modifiedNode = { ...nodeMap[currEdgeParent] };
+                if (currEdgeParent === null) {
+                  return;
+                }
+                const newNodeMap: NodeMap = JSON.parse(JSON.stringify(nodeMap));
                 if (currEdgeDir === "left") {
-                  Object.assign(modifiedNode, { leftChildId: nodeID })
+                  newNodeMap[currEdgeParent].leftChildId = nodeID;
                 } else {
-                  Object.assign(modifiedNode, { rightChildId: nodeID })
+                  newNodeMap[currEdgeParent].rightChildId = nodeID;
                 }
 
-                setNodeMap({ ...nodeMap, [currEdgeParent]: modifiedNode });
+                const parNode = newNodeMap[currEdgeParent];
+                const childNode = newNodeMap[nodeID];
+                const { x, y } = constrainChildPos(childNode.xCoord, childNode.yCoord,
+                  parNode.xCoord, parNode.yCoord, currEdgeDir);
+
+                positionSubtree(nodeID, x, y, newNodeMap);
               }}
             />
           )}
@@ -218,9 +228,7 @@ const App: React.FC = () => {
           <li>Double-click anywhere to create a new node</li>
           <li>Select a node and type to enter data, or BACKSPACE to clear the data</li>
           <li>To delete a node, select it and hit DELETE</li>
-          <li>To create an edge, click on one of the parent's stubs. Then, click the desired child.
-            (Child must be positioned on the correct side of the parent.)
-          </li>
+          <li>To create an edge, click on one of the parent's stubs. Then, click the desired child.</li>
           <li>Click on an edge to delete it</li>
           <li>Drag a node to move its entire subtree</li>
         </ul>

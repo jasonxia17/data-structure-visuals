@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { NodeMap, constrainChildPos } from './App';
+import { NodeMap } from './App';
 
 interface Props {
   nodeID: number;

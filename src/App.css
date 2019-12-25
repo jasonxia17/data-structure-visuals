@@ -29,6 +29,23 @@ li {
   margin-bottom: 6px;
 }
 
+button {
+  background-color: rgb(91, 91, 231);
+  border: none;
+  outline: none;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgb(67, 110, 230);
+}
+
 svg {
   width: 100%;
   height: 100%;
@@ -51,11 +68,11 @@ div.edge-in-creation g.valid-child:hover {
 }
 
 div.no-edge-in-creation g:focus {
-  fill: rgb(218, 231, 255);
+  fill: rgb(234, 241, 255);
 }
 
 div.no-edge-in-creation g:focus:hover {
-  fill: rgb(177, 204, 255);
+  fill: rgb(218, 231, 255);
 }
 
 circle {
@@ -86,6 +103,13 @@ text {
   fill: blue;
   font-size: xx-large;
 
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+text, div.sidebar {
   -webkit-user-select: none; /* Safari */        
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */

@@ -128,10 +128,10 @@ const App: React.FC = () => {
 
   return (
     <div className={className}>
-      <svg onMouseMove={handleMouseMove}
-        onClick={currEdgeParent === null ?
-          createNewNode :
-          () => setCurrEdgeParent(null)}
+      <svg
+        onMouseMove={handleMouseMove}
+        onDoubleClick={createNewNode}
+        onClick={() => setCurrEdgeParent(null)}
         onMouseUp={() => setDraggedNode(null)}
       >
 
@@ -184,7 +184,7 @@ const App: React.FC = () => {
       <div className="sidebar">
         <h3>Binary Search / AVL Tree</h3>
         <ul>
-          <li>Click anywhere to create a new node</li>
+          <li>Double-click anywhere to create a new node</li>
           <li>Select a node and type to enter data (backspace to delete data)</li>
           <li>To create an edge, click on one of the parent's stubs. Then, click the desired child.
             (Child must be positioned properly relative to parent for edge to be created.)

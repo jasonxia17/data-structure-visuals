@@ -30,6 +30,29 @@ export const constrainChildPos = (childX: number, childY: number,
   };
 }
 
+const getAllIdsinSubtree = (subrootId: number | null, nodeMap: NodeMap): number[] => {
+  if (subrootId === null) {
+    return [];
+  }
+
+  return [subrootId]
+    .concat(getAllIdsinSubtree(nodeMap[subrootId].leftChildId, nodeMap))
+    .concat(getAllIdsinSubtree(nodeMap[subrootId].rightChildId, nodeMap))
+}
+
+/**
+ * nodeMap is modified in place. 
+ */
+const positionSubtree = (subrootId: number, x: number, y: number, nodeMap: NodeMap) => {
+  const dx = x - nodeMap[subrootId].xCoord;
+  const dy = y - nodeMap[subrootId].yCoord;
+
+  getAllIdsinSubtree(subrootId, nodeMap).forEach(id => {
+    nodeMap[id].xCoord += dx;
+    nodeMap[id].yCoord += dy;
+  })
+}
+
 const App: React.FC = () => {
   const [nodeMap, setNodeMap] = useState({} as NodeMap);
   const [currEdgeParent, setCurrEdgeParent] = useState(null as number | null);
@@ -72,25 +95,20 @@ const App: React.FC = () => {
     setNodeMap({ ...nodeMap, [currId]: newNode });
   }
 
-  const getAllIdsinSubtree = (subrootId: number | null): number[] => {
-    if (subrootId === null) {
-      return [];
+  const createNewEdge = (parentId: number, childId: number) => {
+    const newNodeMap: NodeMap = JSON.parse(JSON.stringify(nodeMap));
+    if (currEdgeDir === "left") {
+      newNodeMap[parentId].leftChildId = childId;
+    } else {
+      newNodeMap[parentId].rightChildId = childId;
     }
 
-    return [subrootId]
-      .concat(getAllIdsinSubtree(nodeMap[subrootId].leftChildId))
-      .concat(getAllIdsinSubtree(nodeMap[subrootId].rightChildId))
-  }
+    const parNode = newNodeMap[parentId];
+    const childNode = newNodeMap[childId];
+    const { x, y } = constrainChildPos(childNode.xCoord, childNode.yCoord,
+      parNode.xCoord, parNode.yCoord, currEdgeDir);
 
-  const positionSubtree = (subrootId: number, x: number, y: number, newNodeMap: NodeMap) => {
-    const dx = x - nodeMap[subrootId].xCoord;
-    const dy = y - nodeMap[subrootId].yCoord;
-
-    getAllIdsinSubtree(subrootId).forEach(id => {
-      newNodeMap[id].xCoord += dx;
-      newNodeMap[id].yCoord += dy;
-    })
-
+    positionSubtree(childId, x, y, newNodeMap);
     setNodeMap(newNodeMap);
   }
 
@@ -109,7 +127,9 @@ const App: React.FC = () => {
         ({ x, y } = constrainChildPos(x, y, parNode.xCoord, parNode.yCoord, dir));
       }
 
-      positionSubtree(draggedNodeId, x, y, JSON.parse(JSON.stringify(nodeMap)));
+      const newNodeMap = JSON.parse(JSON.stringify(nodeMap));
+      positionSubtree(draggedNodeId, x, y, newNodeMap);
+      setNodeMap(newNodeMap);
     }
   }
 
@@ -201,22 +221,9 @@ const App: React.FC = () => {
               }}
 
               createEdge={() => {
-                if (currEdgeParent === null) {
-                  return;
+                if (currEdgeParent !== null) {
+                  createNewEdge(currEdgeParent, nodeID);
                 }
-                const newNodeMap: NodeMap = JSON.parse(JSON.stringify(nodeMap));
-                if (currEdgeDir === "left") {
-                  newNodeMap[currEdgeParent].leftChildId = nodeID;
-                } else {
-                  newNodeMap[currEdgeParent].rightChildId = nodeID;
-                }
-
-                const parNode = newNodeMap[currEdgeParent];
-                const childNode = newNodeMap[nodeID];
-                const { x, y } = constrainChildPos(childNode.xCoord, childNode.yCoord,
-                  parNode.xCoord, parNode.yCoord, currEdgeDir);
-
-                positionSubtree(nodeID, x, y, newNodeMap);
               }}
             />
           )}

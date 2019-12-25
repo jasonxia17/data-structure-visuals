@@ -11,10 +11,11 @@ interface Props {
   /* Create edge with this node as child */
   createEdge: () => void;
   onMouseDown: (e: React.MouseEvent) => void;
+  onBackspace: () => void;
 }
 
 const TreeNode: React.FC<Props> = (
-  { nodeID, nodeMap, changeData,
+  { nodeID, nodeMap, changeData, onBackspace,
     handleSelectStub, currEdgeParent, currEdgeDir, createEdge, onMouseDown }) => {
 
   const { xCoord, yCoord, nodeData, leftChildId, rightChildId } = nodeMap[nodeID];
@@ -44,7 +45,7 @@ const TreeNode: React.FC<Props> = (
       <g className={isValidChild ? "valid-child" : ""} tabIndex={0}
         onKeyDown={e => {
           if (e.key === "Backspace") {
-            changeData(nodeID, "");
+            onBackspace();
             return;
           }
 

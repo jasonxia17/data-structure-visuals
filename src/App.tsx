@@ -235,7 +235,7 @@ const App: React.FC = () => {
 
         <button onClick={copyPermalinkToClipboard}>Copy permalink to clipboard</button>
         <button onClick={() => window.location.href = window.location.origin}>Clear</button>
-
+        <p className="author"><i>Created by <a href="mailto:jasonx3@illinois.edu">Jason Xia</a></i></p>
       </div>
     </div>
   );

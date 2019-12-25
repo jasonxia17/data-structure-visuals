@@ -129,7 +129,8 @@ const App: React.FC = () => {
   }
 
   const copyPermalinkToClipboard = () => {
-    const permalink = window.location.origin + "/?data=" + encodeURIComponent(JSON.stringify(nodeMap));
+    const permalink = window.location.origin + window.location.pathname +
+      "?data=" + encodeURIComponent(JSON.stringify(nodeMap));
     navigator.clipboard.writeText(permalink);
   }
 
@@ -202,7 +203,7 @@ const App: React.FC = () => {
                 setDraggedNode(nodeID);
                 const x = nodeMap[nodeID].xCoord - e.pageX;
                 const y = nodeMap[nodeID].yCoord - e.pageY;
-                setGrabOffset({x, y});
+                setGrabOffset({ x, y });
               }}
 
               createEdge={() => {
@@ -234,7 +235,10 @@ const App: React.FC = () => {
         </ul>
 
         <button onClick={copyPermalinkToClipboard}>Copy permalink to clipboard</button>
-        <button onClick={() => window.location.href = window.location.origin}>Clear</button>
+        <button onClick={() =>
+          window.location.href = window.location.origin + window.location.pathname}>
+          Clear
+        </button>
         <p className="author"><i>Created by <a href="mailto:jasonx3@illinois.edu">Jason Xia</a></i></p>
       </div>
     </div>

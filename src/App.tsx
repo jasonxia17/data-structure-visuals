@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import * as mathjs from 'mathjs';
 import TreeNode from './TreeNode';
 import EdgeInCreation from './EdgeInCreation';
 import Edge from './Edge';

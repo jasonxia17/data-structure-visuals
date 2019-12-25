@@ -102,14 +102,31 @@ const App: React.FC = () => {
     } else {
       newNodeMap[parentId].rightChildId = childId;
     }
+    setNodeMap(JSON.parse(JSON.stringify(newNodeMap)));
 
     const parNode = newNodeMap[parentId];
     const childNode = newNodeMap[childId];
-    const { x, y } = constrainChildPos(childNode.xCoord, childNode.yCoord,
+    const { x : targetX, y : targetY } = constrainChildPos(childNode.xCoord, childNode.yCoord,
       parNode.xCoord, parNode.yCoord, currEdgeDir);
+    
+    const animateCallback = () => {
+      const dx = targetX - childNode.xCoord;
+      const dy = targetY - childNode.yCoord;
 
-    positionSubtree(childId, x, y, newNodeMap);
-    setNodeMap(newNodeMap);
+      if (dx === 0 && dy === 0) {
+        return;
+      }
+      
+      if (dx !== 0) {
+        positionSubtree(childId, childNode.xCoord + Math.sign(dx), childNode.yCoord, newNodeMap);
+      } else if (dy !== 0) {
+        positionSubtree(childId, childNode.xCoord, childNode.yCoord + Math.sign(dy), newNodeMap);
+      }
+
+      setNodeMap(JSON.parse(JSON.stringify(newNodeMap)));
+      window.requestAnimationFrame(animateCallback);
+    }
+    window.requestAnimationFrame(animateCallback);   
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
